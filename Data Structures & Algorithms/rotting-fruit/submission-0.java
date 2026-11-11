@@ -1,0 +1,47 @@
+class Solution {
+    int []x={-1,1,0,0};
+    int[]y = {0,0,-1,1};
+    private boolean valid(int i,int j,int n,int m){
+        if(i<0 || j<0|| i>=n || j>=m)return false;
+        return  true;
+    }
+    public int orangesRotting(int[][] a) {
+        Queue<int[]>q= new LinkedList<>();
+        int n = a.length;
+        int m = a[0].length;
+        int time = 0;
+        int fresh = 0;
+        for(int i=0;i<n;i++){
+            for (int j=0;j<m;j++){
+                if(a[i][j]==2){
+                    q.offer(new int[]{i,j});
+                    a[i][j]=-2;
+                }else if(a[i][j]==1)fresh++;
+            }
+        }
+        while(!q.isEmpty()&&fresh>0){
+            time++;
+            int s = q.size();
+            while(s>0){
+                int[]p=q.poll();
+                int r = p[0];
+                int c = p[1];
+
+                for(int k=0;k<4;k++){
+                    int row = r + x[k];
+                    int col = c+y[k];
+
+                    if(valid(row,col,n,m) && a[row][col]==1){
+                        q.offer(new int[]{row,col});
+                        a[row][col] = -2;
+                        fresh--;
+
+                    }
+                }
+                s--;
+            }
+
+        }
+        return fresh>0?-1:time;
+    }
+}
